@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trojan Leaderboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #07132a;
+      color: white;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #0d1f44;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    th {
+      background: #12306b;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .rank-1 { color: gold; font-weight: bold; }
+    .rank-2 { color: silver; font-weight: bold; }
+    .rank-3 { color: #cd7f32; font-weight: bold; }
+
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trojan Leaderboard</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Coins</th>
+        <th>Health Lost</th>
+        <th>Retries</th>
+      </tr>
+    </thead>
+    <tbody id="leaderboard-body"></tbody>
+  </table>
+
+  <div class="footer">Auto-refreshing every 3 seconds</div>
+
+  <script>
+    async function loadScores() {
+      const res = await fetch("/api/scores");
+      const scores = await res.json();
+
+      const tbody = document.getElementById("leaderboard-body");
+      tbody.innerHTML = "";
+
+      scores.forEach((score, index) => {
+        const row = document.createElement("tr");
+
+        const rankClass =
+          index === 0 ? "rank-1" :
+          index === 1 ? "rank-2" :
+          index === 2 ? "rank-3" : "";
+
+        row.innerHTML = `
+          <td class="${rankClass}">${index + 1}</td>
+          <td>${score.name}</td>
+          <td>${score.coins}</td>
+          <td>${score.healthLost}</td>
+          <td>${score.retries}</td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    loadScores();
+    setInterval(loadScores, 3000);
+  </script>
+</body>
+</html>
