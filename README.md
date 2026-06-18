@@ -31,3 +31,9 @@ Install the required packages:
 
 ```bash
 npm install
+
+## Main Game Repository
+
+This server was created for the Trojan cyber-awareness game developed in Unity and C#.
+
+[View the Trojan Cyber-Awareness Game repository](https://github.com/dragonstorm1719/Trojan-Cyber-Awareness-Game)
